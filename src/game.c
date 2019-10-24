@@ -66,6 +66,7 @@ void run() {
   // start the event loop
   while((ich = getch()) && success) {
     // key typed?
+    /*
     if(ich == ERR) {
     } else if(ich == '0') {
       // reset the speed
@@ -79,6 +80,27 @@ void run() {
     } else {
       // use this key as a direction
       ch = ich;
+    }
+    */
+    switch(ich){
+    case '0':
+      interval = 100000000;
+      break;
+
+    case '8':
+      default_interval *= 1.1;
+      break;
+
+    case '9':
+      default_interval *= 0.9;
+      break;
+
+    default:
+      if(ich != ERR)
+        ch = ich;
+
+      break;
+
     }
     // check if we have an overrun
     current_utc_time(&current_time);
@@ -98,14 +120,18 @@ void run() {
         }
       }
       // new direction? 
-      if((ch == KEY_UP || ch == 'w') && game.snake.dir != DIR_DOWN) {
+      if((ch == KEY_UP || ch == 'w') && game.snake.dir != DIR_DOWN && game.snake.dir != DIR_UP) {
         game.snake.dir = DIR_UP;
-      } else if((ch == KEY_LEFT || ch == 'a') && game.snake.dir != DIR_RIGHT) {
-        game.snake.dir = DIR_LEFT;
-      } else if((ch == KEY_RIGHT || ch == 'd') && game.snake.dir != DIR_LEFT) {
-        game.snake.dir = DIR_RIGHT;
-      } else if((ch == KEY_DOWN || ch == 's') && game.snake.dir != DIR_UP) {
+        interval = default_interval * 1.3; //가로 세로 다른 속력
+      } else if((ch == KEY_LEFT || ch == 'a') && game.snake.dir != DIR_RIGHT && game.snake.dir != DIR_LEFT) {
+        game.snake.dir = DIR_LEFT; // 가로 세로 다른 속력
+        interval = default_interval * 0.9;
+      } else if((ch == KEY_RIGHT || ch == 'd') && game.snake.dir != DIR_LEFT && game.snake.dir != DIR_RIGHT) {
+        game.snake.dir = DIR_RIGHT; //가로 세로 다른 속력
+        interval = default_interval * 0.9;
+      } else if((ch == KEY_DOWN || ch == 's') && game.snake.dir != DIR_UP && game.snake.dir != DIR_DOWN) {
         game.snake.dir = DIR_DOWN;
+        interval = default_interval * 1.3; //가로 세로 다른 속력
       }
       // move the snake
       success = move_snake(&game);
@@ -135,6 +161,7 @@ void run() {
         case 2:
           // leave the game if '2' is pressed
           success = 0;
+          break;
         default:
           // redraw the screen on resume
           game.paused += time(NULL) - pause_start;

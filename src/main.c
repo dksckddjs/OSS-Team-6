@@ -25,6 +25,8 @@ void main_menu() {
   int selected_menu_entry;
   do {
     selected_menu_entry = display_menu();
+
+    /*
     if(selected_menu_entry == 1) {
       // run the game
       run();
@@ -44,6 +46,38 @@ void main_menu() {
       }
     }
     // leave if the menu entry "exit" is chosen
+    */
+
+    switch(selected_menu_entry){
+    case 1:
+      //게임 실행
+      run();
+      break;
+
+    case 2:
+      //하이스코어 보기
+      show_highscores();
+      break;
+
+    case 3:
+      //조작법 보기
+      display_controls();
+      break;
+
+    case 4:
+      //도움말 보기
+      display_help();
+      break;
+
+    case 5:
+      //하이스코어 지우기, 1로 확인
+      if(clear_score_dialog() == 1){
+        clear_highscore();
+      }
+      break;
+
+    }
+
   } while(selected_menu_entry != 6);
 }
 
