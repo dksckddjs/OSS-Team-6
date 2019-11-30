@@ -32,6 +32,8 @@ void run() {
   // create the game struct
   //GAME 생성
   GAME game = {};
+  // 뱀의 속도를 늦추는 과일을 만들기 위해 포인터 변수 gameInterval을 지역 변수 interval과 이어준다.
+  game.gameInterval = &interval;
 
   // set the eat range to 1
   //뱀 먹이 사정거리 1로 설정

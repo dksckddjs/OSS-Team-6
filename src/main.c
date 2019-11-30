@@ -7,7 +7,7 @@ int main() {
 
   // for some better random numbers (and not always the same)
   //더 효율적인 난수 생성
-  srand(time(NULL));
+  srand((unsigned int)time(NULL));
   
   init_curses();
 
@@ -16,7 +16,7 @@ int main() {
   end_curses();
 
   // free the allocated memory for the highscore
-  //하이스코어에 할당된 메모리 프리
+  //하이스코어에 할당된 메모리 할당 해제
   read_highscore(NULL);
   // close the logfile
   //로그 파일 닫기
@@ -105,7 +105,7 @@ void init_curses() {
   //화면에 인풋 키 보여주지 않기
   noecho();
   // colors!
-  //색갈 정의
+  //색깔 정의
   start_color();
   set_colors();
   // also grab keys like F1 etc.

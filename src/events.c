@@ -18,9 +18,10 @@ int check_fruit_collision(GAME* game, int cury, int curx) {
   int endy = starty + range * 2 + 1;
   int x,y;
 
-  int on = 0; // check if there is food in the calculated range, 사정거리 안 먹이 있는지 검사
+  int isFruit = 0; // check if there is food in the calculated range, 사정거리 안 먹이 있는지 검사
   // iterate througth every field inside the range
   //사정거리 안 모든 칸 검사
+  // 최대 25칸 검사
   for(x = startx; x  < endx; x++) {
     for(y = starty; y  < endy; y++) {
       // is a fruit on the current field?
@@ -33,18 +34,18 @@ int check_fruit_collision(GAME* game, int cury, int curx) {
           //과일 핸들러 실행
           check_fruit_collision_handler(game, y, x);
         }
-        on = 1; // found one!, 과일 찾았을때
+        isFruit = 1; // found one!, 과일 찾았을때
       }
     }
   }
-  return on;
+  return isFruit;
 }
  
 // calls the effect of the fruit
 //과일 효과 실행
 int check_fruit_collision_handler(GAME* game, int cury, int curx) {
   // the the fruit by the given position
-  //특ㅈㅇ 칸에 있는 과일
+  //특정 칸에 있는 과일
   FRUIT *fruit = fruit_is_on(&game->fruits, cury, curx);
   // is one on this position?
   //특정 칸에 과일 유무 검사
@@ -124,7 +125,7 @@ int check_self_collision(GAME* game, int cury, int curx) {
   WINDOW* on;
   // check if the position of the snake head is matching with the position of a snake part
   //뱀 머리가 뱀 몸과 같은 위치에 있는지 검사
-  // exept for the last part (because it will move
+  // except for the last part (because it will move
   //마지막 부분 빼고
   return !((on = snake_part_is_on(&game->snake, cury, curx)) == NULL || on == game->snake.parts[game->snake.length - 1]);
 }

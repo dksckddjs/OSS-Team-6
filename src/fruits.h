@@ -4,13 +4,13 @@
 #include "types.h"
 #include <stdlib.h>
 
-void redraw_fruits(FRUITS *fruits);
-void kill_fruits(FRUITS* fruits);
-void kill_fruit(FRUITS *fruits, int posy, int posx);
-void kill_fruit_by_ptr(FRUITS *fruits, FRUIT *fruit);
-void kill_fruit_at_pos(FRUITS *fruits, int index);
-FRUIT *fruit_is_on(FRUITS *fruits, int posy, int posx);
+void redraw_fruits(FRUITLIST *fruits);
+void kill_fruits(FRUITLIST* fruits);
+void kill_fruit(FRUITLIST *fruits, int posy, int posx);
+void kill_fruit_by_ptr(FRUITLIST *fruits, FRUITNODE *fruit);
+void kill_fruit_at_pos(FRUITLIST *fruits, int index);
+FRUITNODE *fruit_is_on(FRUITLIST *fruits, int posy, int posx);
 void grow_fruit(GAME* game);
-void get_fruit(FRUIT *fruit, int posy, int posx);
+void get_fruit(FRUITNODE *fruit, int posy, int posx);
 
 #endif /* FRUITS_H */
