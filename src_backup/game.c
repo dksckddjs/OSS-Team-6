@@ -14,56 +14,14 @@ void kill_game(GAME *game) {
   kill_fruits(&game->fruits);
   kill_snake(&game->snake);
 }
-
-//화면 크기 변화 감지 
+/*
 int screen_changed(GAME *game, int current_rows, int current_columns){
   if(current_rows != game->rows || current_columns != game->columns)
     return 1;
   else
     return 0;
 }
-
-int check_invalid_dir(GAME *game, direction dir){
-  if(dir == DIR_UP && game->snake.dir != DIR_DOWN && dir != game->snake.dir)
-    return 1;
-  else if(dir == DIR_DOWN && game->snake.dir != DIR_UP && dir != game->snake.dir)
-    return 1;
-  else if(dir == DIR_RIGHT && game->snake.dir != DIR_LEFT && dir != game->snake.dir)
-    return 1;
-  else if(dir == DIR_LEFT && game->snake.dir != DIR_RIGHT && dir != game->snake.dir)
-    return 1;
-  else
-    return 0;
-    
-}
-
-long long direction_change(GAME *game, int ch, long long default_interval){
-
-  if(  (ch == KEY_UP || ch == 'w') && (check_invalid_dir(game, DIR_UP) == 1)  ) {
-    game->snake.dir = DIR_UP;
-      //interval = default_interval * 1.3; //가로 세로 다른 속력
-    return default_interval * (long long)1.9;
-
-    } else if((ch == KEY_LEFT || ch == 'a') && (check_invalid_dir(game, DIR_LEFT) == 1) ) {
-    game->snake.dir = DIR_LEFT; // 가로 세로 다른 속력
-      //interval = default_interval * 0.9;
-    return default_interval * (long long)0.9; 
-
-    } else if((ch == KEY_RIGHT || ch == 'd') && (check_invalid_dir(game, DIR_RIGHT) == 1) ) {
-    game->snake.dir = DIR_RIGHT; //가로 세로 다른 속력
-      //interval = default_interval * 0.9;
-    return default_interval * (long long)0.9;
-
-    } else if((ch == KEY_DOWN || ch == 's') && (check_invalid_dir(game, DIR_DOWN) == 1) ) {
-      game->snake.dir = DIR_DOWN;
-      //interval = default_interval * 1.3; //가로 세로 다른 속력
-      return default_interval * (long long)1.9;
-
-    }
-
-  
-  return default_interval;
-}
+*/
 
 void run() {
   int ch = 0, ich, i, current_columns, current_rows, success = 1;
@@ -196,8 +154,6 @@ void run() {
           game.snake.eat_range--; // so, decrease it!  사정거리 줄이기
         }
       }
-
-      /*
       // new direction?
       //새로운 방향?
       if((ch == KEY_UP || ch == 'w') && game.snake.dir != DIR_DOWN && game.snake.dir != DIR_UP) {
@@ -213,10 +169,6 @@ void run() {
         game.snake.dir = DIR_DOWN;
         interval = default_interval * 1.3; //가로 세로 다른 속력
       }
-      */
-
-      interval = direction_change(&game, ch, default_interval);
-
       // move the snake
       //뱀 움직이기
       success = move_snake(&game);
@@ -238,10 +190,10 @@ void run() {
     // 'p' pressed || size of the terminal changed
     //p가 눌리면 || 윈도우 크기가 바뀌면
     
-    //if(ich == 'p' || (current_rows != game.rows || current_columns != game.columns)) {
+    if(ich == 'p' || (current_rows != game.rows || current_columns != game.columns)) {
     
 
-    if(ich == 'p' || screen_changed(&game, current_rows, current_columns) == 1){
+      //if(ich == 'p' || screen_changed(&game, current_rows, current_columns) == 1){
       // use the terminal new size
       //새로운 윈도우 크기 사용
       game.rows = current_rows;

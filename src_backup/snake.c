@@ -64,59 +64,6 @@ void grow_snake(SNAKE *snake, int posy, int posx) {
   return;
 }
 
-
-int diff_axis(GAME *game, char axis){
-  direction temp1, temp2;
-
-  if(axis == 'x'){
-    temp1 = DIR_LEFT;
-    temp2 = DIR_RIGHT;
-  }
-  else if(axis == 'y'){
-    temp1 = DIR_UP;
-    temp2 = DIR_DOWN;
-  }
-
-  if(game->snake.dir == temp1)
-    return -1;
-  else if(game->snake.dir == temp2)
-    return 1;
-  else
-    return 0;
-
-}
-
-int new_pos(GAME *game, int cur, int diff, char axis){
-  
-  if(axis == 'x'){
-    cur = (cur + diff) % game->columns;
-    // calculate the new position and prevent from exceeding the size of the screen
-    //새로운 위치 계산하고 테두리 안벗어나게 검사
-
-    if(cur < 0)
-      cur = game->columns + cur;
-      // the values have to be positive
-      //값이 양수여야 함
-    
-    return cur;
-  }
-  else if(axis == 'y'){
-    cur = (cur + diff) % game->rows;
-    // calculate the new position and prevent from exceeding the size of the screen
-    //새로운 위치 계산하고 테두리 안벗어나게 검사
-
-    if(cur < 0)
-      cur = game->rows + cur;
-      // the values have to be positive
-      //값이 양수여야 함
-
-    return cur;
-  }
-
-  return cur;
-}
-
-
 // free the allocated memory for the snake
 //뱀에 할당된 메모리 프리
 void kill_snake(SNAKE *snake) {
@@ -160,20 +107,14 @@ int move_snake(GAME *game) {
     check_fruit_collision_handler
   };
 
-  /*
+
   // difference on x-axis according to the direction
   //뱀이 움직이는 방향과 x축 대한 차이
   int xdiff = game->snake.dir == DIR_LEFT ? -1 : (game->snake.dir == DIR_RIGHT ? 1 : 0);
   // difference on y-axis according to the direction
   //뱀이 움직이는 방향과 y축 대한 차이
   int ydiff = game->snake.dir == DIR_UP ? -1 : (game->snake.dir == DIR_DOWN ? 1 : 0);
-  */
 
-  //축 차이 함수화 
-  int xdiff = diff_axis(game, 'x');
-  int ydiff = diff_axis(game, 'y');
-
-  
   // the position of the snake head
   //뱀 머리 위치
   getbegyx(game->snake.parts[0], cury, curx);
@@ -183,7 +124,6 @@ int move_snake(GAME *game) {
   tmpy = cury;
   tmpx = curx;
 
-  /*
   // calculate the new position and prevent from exceeding the size of the screen
   //새로운 위치 계산하고 테두리 안벗어나게 검사
   cury = (cury + ydiff) % game->rows;
@@ -192,13 +132,7 @@ int move_snake(GAME *game) {
   //값이 양수여야 함
   cury = cury < 0 ? game->rows + cury : cury;
   curx = curx < 0 ? game->columns + curx : curx;
-  */
 
-  // calculate the new position and prevent from exceeding the size of the screen
-  cury = new_pos(game, cury, ydiff, 'y');
-  curx = new_pos(game, curx, xdiff, 'x');
-
-  
   // check for collisons and execute the handlers if a collision occured
   //충돌 확인하고 핸들러 실행
   for(i = 0; i < EVENTS && success; i++) {
