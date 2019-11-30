@@ -342,11 +342,18 @@ void show_highscores() {
   // 파일에서 하이스코어 읽기
   HIGHSCORE *highscore = read_highscore(&num);
 
+/*
+  18011561_cleanCode
+  구조상 불필요한 if문을 제거하고, 매크로 상수를 사용하여 하드코딩을 수정하였다.
   // limit the highscore display to (at the moment 14) entries
   // 하이스코어를 14개만 표시
   if(num > DIALOG_HEIGHT - 6) {
     num = DIALOG_HEIGHT - 6;
   }
+*/
+  // limit the highscore display to (at the moment 14) entries
+  // 하이스코어를 14개만 표시
+  num = HIGHSCORE_LIMIT;
 
   // create a char array for the content of the highscore table
   //하이스코어 내용

@@ -14,6 +14,7 @@
 #define INDEX0 0
 #define INDEX_LAST (DIALOG_WIDTH - 1)
 #define SPACE 1
+#define HIGHSCORE_LIMIT 14
 WINDOW *create_dialog_window();
 int create_numbered_dialog(const char *title, const char *contents, int lines);
 int create_enter_dialog(const char *title, const char *contents, int lines);
