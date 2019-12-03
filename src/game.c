@@ -7,7 +7,6 @@
 #include "highscore.h"
 #include "status-display.h"
 #include "time-helpers.h"
-
 // end the game, free the resources
 //게임 끝내기, free 메모리
 void kill_game(GAME *game) {

@@ -9,13 +9,11 @@ SNAKEBODY *getLastBody(SNAKE *snake) {
 	return tmp;
 }
 
-
 // check if a part of the snake is on the given spot
 //뱀의 일부가 특정 위치에 있는지 확인
 // returns a WINDOW * if one is found, NULL if not
 //있으면 WINDOW * 리턴, 없으면 NULL
 WINDOW *snake_part_is_on(SNAKE *snake, int posy, int posx) {
-	int i;
 	int cury, curx; // position of the current snake part we are iterating, 뱀의 위치
 
 	// iterate each part
@@ -37,6 +35,7 @@ WINDOW *snake_part_is_on(SNAKE *snake, int posy, int posx) {
 	*/
 	SNAKEBODY *sb = snake->head;
 	while (sb->next != NULL) {
+		getbegyx(sb->body, cury, curx);
 		if (sb->posx == curx && sb->posy == cury) {
 			return sb->body;
 		}
@@ -198,7 +197,7 @@ int move_snake(GAME *game) {
 		mvprintw(game->snake->dir, 0, 0, "%c", game->snake->dir);
 		// move the window
 		//윈도우 움직이기
-		mvwin(game->snake->head, cury, curx);
+		mvwin(head->body, cury, curx);
 
 		// copy values back
 		//다시 복사하기
@@ -226,8 +225,8 @@ int move_snake(GAME *game) {
 		*/
 		SNAKEBODY *tmp = head->next;
 		while (tmp->next != NULL) {
-			getbegyx(tmp, tmpy, tmpx);
-			mvwin(tmp, cury, curx);
+			getbegyx(tmp->body, tmpy, tmpx);
+			mvwin(tmp->body, cury, curx);
 
 			cury = tmpy;
 			curx = tmpx;
@@ -238,7 +237,7 @@ int move_snake(GAME *game) {
 			game->snake->grow--;
 		}
 		else {
-			getbegyx(head, tmpy, tmpx);
+			getbegyx(head->body, tmpy, tmpx);
 			if (!(tmpy == cury && tmpx == curx)) {
 				// if no print a space at this position
 				//아니면 스페이스 출력
@@ -250,7 +249,7 @@ int move_snake(GAME *game) {
 		}
 		// redraw the snake on the screen
 		//뱀 화면에 다시 그리기
-		redraw_snake(&game->snake);
+		redraw_snake(game->snake);
 	}
 	return success;
 }
