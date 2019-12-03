@@ -50,7 +50,7 @@ void kill_fruit_at_idx(FRUITLIST *fruits, int i) {
   //메모리 재할당
   // 이 함수를 사용할 때 기존에 지우려던 fruit을 메모리 할당 해제함으로써 fruitList에서 나가게 하는 것이아닌,
   // 지우려던 fruit을 제외하고 다른것들이 단일 링크드 리스트에서 이어지게 한 후 메모리 재할당을 통해 없애는 방식이다.
-  fruits->fruits = realloc(fruits->fruits, --fruits->length * sizeof(FRUIT));
+  fruits->fruits = realloc(fruits->fruits, --fruits->length * sizeof(FRUITNODE));
 }
 
 
@@ -77,7 +77,7 @@ FRUITNODE *fruit_is_on(FRUITLIST *fruits, int posy, int posx) {
   return NULL;
 }
 
-int isNullSpace(GAME *game) {
+int isNullSpace(GAME *game,int randy,int randx) {
   if(snake_part_is_on(&game->snake,randy,randx) != NULL || fruit_is_on(&game->fruits, randy, randx) != NULL || check_extended_border_collision(game, randy, randx)) {
     return 0;
   }
@@ -101,7 +101,7 @@ void grow_fruit(GAME* game) {
   randx = rand() % game->columns;
   // generate a new random position until a empty spot is found
   //빈 위치 찾을때까지 랜덤으로 위치 생성
-  if(!isNullSpace(game)) {
+  if(!isNullSpace(game, randy, randx)) {
     grow_fruit(game);
     return;
   }// 가독성은 아래꺼 속도는 위에꺼
@@ -114,11 +114,11 @@ void grow_fruit(GAME* game) {
   if(game->fruits.length == 0) {
     // initialize the array with malloc if it is the first fruit in the array
     //처음 과일이면 malloc
-    game->fruits.fruits = malloc(sizeof(FRUIT) * game->fruits.length);
+    game->fruits.fruits = malloc(sizeof(FRUITNODE) * game->fruits.length);
   } else {
     // allocate more memory
     //realloc
-    game->fruits.fruits = realloc(game->fruits.fruits, sizeof(FRUIT) * game->fruits.length);
+    game->fruits.fruits = realloc(game->fruits.fruits, sizeof(FRUITNODE) * game->fruits.length);
   }
   
   // get a filled struct (containing the displayed char, the effect & co.) of the new fruit
