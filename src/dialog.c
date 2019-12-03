@@ -30,7 +30,7 @@ WINDOW *create_dialog_window(const char *title) {
   int sx, sy, i, u, startpos;
 
   // get the screen size
-  //현재 화면 크기 얻기
+  //현재 화면 크기 얻기 
   getmaxyx(stdscr, sy, sx);
   // create a little window in the center of the screen with a border and a size of 40x20
   //중심에 40x20크기의 윈도우 생성

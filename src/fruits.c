@@ -77,7 +77,7 @@ FRUITNODE *fruit_is_on(FRUITLIST *fruits, int posy, int posx) {
   return NULL;
 }
 
-int isNullSpace(Game *game) {
+int isNullSpace(GAME *game) {
   if(snake_part_is_on(&game->snake,randy,randx) != NULL || fruit_is_on(&game->fruits, randy, randx) != NULL || check_extended_border_collision(game, randy, randx)) {
     return 0;
   }

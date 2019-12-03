@@ -148,6 +148,11 @@ void run() {
           game.snake.eat_range--; // so, decrease it!  사정거리 줄이기
         }
       }
+	  // reduce_speed 과일을 먹었을 때
+	  if (game.snake.isEatRFruit == 1) {
+		  default_interval *= 0.9;
+	  }
+
       // new direction?
       //새로운 방향?
       if((ch == KEY_UP || ch == 'w') && game.snake.dir != DIR_DOWN && game.snake.dir != DIR_UP) {
