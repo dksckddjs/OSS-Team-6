@@ -121,15 +121,13 @@ int check_border_collision_handler(GAME* game, int cury, int curx) {
 // we only need to check if the snake head is colliding
 //머리만 검사
 int check_self_collision(GAME* game, int cury, int curx) {
-  WINDOW* on;
+  WINDOW* on = snake_part_is_on(game->snake, cury, curx);
   // check if the position of the snake head is matching with the position of a snake part
   //뱀 머리가 뱀 몸과 같은 위치에 있는지 검사
   // exept for the last part (because it will move
   //마지막 부분 빼고
-  int i;
   SNAKEBODY *tail = getLastBody(game->snake);
-
-  return !(on == snake_part_is_on(game->snake, cury, curx) && on != tail->body);
+  return !(on == NULL && on != tail->body);
 }
 
 // ends the game if a collision is present

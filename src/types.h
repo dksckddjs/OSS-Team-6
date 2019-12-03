@@ -51,7 +51,7 @@ typedef struct snakebody {
 }SNAKEBODY;
 
 typedef struct snake {
-	struct SNAKEBODY* head; // dynamic array of window pointers
+	SNAKEBODY* head; // dynamic array of window pointers
 	int length; // length of the dynamic array
 	direction dir; // the direction of the snake
 	int grow; // the number of times the snake has to grow 

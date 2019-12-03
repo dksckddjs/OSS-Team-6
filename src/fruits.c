@@ -99,7 +99,7 @@ void grow_fruit(GAME* game) {
     randx = rand() % game->columns;
     // is nothing else there in the generated position?
     //빈 위치이지 검사
-  } while (snake_part_is_on(&game->snake, randy, randx) != NULL || fruit_is_on(&game->fruits, randy, randx) != NULL || check_extended_border_collision(game, randy, randx));
+  } while (snake_part_is_on(game->snake, randy, randx) != NULL || fruit_is_on(&game->fruits, randy, randx) != NULL || check_extended_border_collision(game, randy, randx));
 
   // increase the length
   //길이 늘리기
