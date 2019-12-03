@@ -14,7 +14,6 @@ typedef enum {
   DIR_LEFT = '<'
 } direction;
 
-
 // delcare a game struct
 struct game;
 
@@ -38,6 +37,7 @@ typedef struct snake {
   direction dir; // the direction of the snake
   int grow; // the number of times the snake has to grow 
   int eat_range;
+  int isEatRFruit;
 } SNAKE;
 
 // a struct containing all the data needed for a game
