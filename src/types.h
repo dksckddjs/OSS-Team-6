@@ -22,13 +22,13 @@ typedef struct fruit {
   WINDOW *win;
   // the callback function which will be called if the snake hits this fruit
   void (*effect)(struct game*);
-} FRUIT;
+} FRUITNODE;
 
 // represents a collection of fruit, which can be eaten by the snake
 typedef struct fruits {
-  FRUIT* fruits; // dynamic array of fruits
+  FRUITNODE *fruits; // dynamic array of fruits
   int length; // the length of the dynamic array
-} FRUITS;
+} FRUITLIST;
 
 // the snake
 typedef struct snake {
