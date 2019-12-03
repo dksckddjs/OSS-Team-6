@@ -10,7 +10,7 @@
 // grow 1 new fruit, 과일 1개 생성
 void normal_effect(GAME *game) {
   grow_fruit(game);
-  game->snake.grow++;
+  game->snake->grow++;
   game->highscore++;
 }
 
@@ -31,7 +31,7 @@ void double_grow(GAME *game) {
 // grow 1 new fruit, 과일 1개 생성
 void mega_food(GAME *game) {
   normal_effect(game);
-  game->snake.grow += 4;
+  game->snake->grow += 4;
   game->highscore += 9;
 }
 
@@ -43,5 +43,5 @@ void mega_food(GAME *game) {
 // SPECIAL: the range the snake eats food increases by 1 temporarily, 먹이 사정거리 1로 증가
 void eat_boost(GAME *game) {
   normal_effect(game);
-  game->snake.eat_range++;
+  game->snake->eat_range++;
 }

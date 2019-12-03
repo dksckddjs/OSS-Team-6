@@ -26,7 +26,7 @@ void status_display(GAME *game) {
   // print out the current length, the points, the time and the current highscore
   //현재 뱀 길이, 점수, 시간, 하이스코어 출력
   wprintw(win,"%03iL-%05iP-%04is-%04iSCR",
-      game->snake.length,
+      game->snake->length,
       game->highscore,
       time(NULL) - game->started - game->paused,
       calculate_score(game->highscore, time(NULL) - game->started - game->paused));

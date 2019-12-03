@@ -379,7 +379,7 @@ void display_highscore(GAME *game, char *buf, int length) {
 
   // generate the window contents
   //내용 생성
-  snprintf(content                    , CONTENT_WIDTH, "snake length : %i", game->snake.length);
+  snprintf(content                    , CONTENT_WIDTH, "snake length : %i", game->snake->length);
   snprintf(content + CONTENT_WIDTH    , CONTENT_WIDTH, "points       : %i", game->highscore);
   snprintf(content + CONTENT_WIDTH * 2, CONTENT_WIDTH, "time         : %lis", game->ended - game->started - game->paused);
   snprintf(content + CONTENT_WIDTH * 3, CONTENT_WIDTH, "highscore    : %i", calculate_score(game->highscore, game->ended - game->started - game->paused));

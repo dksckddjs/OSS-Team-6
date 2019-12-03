@@ -43,14 +43,15 @@ typedef struct snake {
 } SNAKE;
 */
 
-typedef struct SNAKEBODY {
-	struct SNAKEBODY* next;//뱀의 다음 노드
+typedef struct snakebody {
+	struct snakebody* next;//뱀의 다음 노드
+	WINDOW *body;
 	int posy;
 	int posx;
 }SNAKEBODY;
 
 typedef struct snake {
-	struct SNAKEBODY* parts; // dynamic array of window pointers
+	struct SNAKEBODY* head; // dynamic array of window pointers
 	int length; // length of the dynamic array
 	direction dir; // the direction of the snake
 	int grow; // the number of times the snake has to grow 
@@ -60,7 +61,7 @@ typedef struct snake {
 // a struct containing all the data needed for a game
 typedef struct game {
   FRUITS fruits; // the collection of fruits on the screen
-  SNAKE snake; // the snake
+  SNAKE *snake; // the snake
   time_t started; // timestamp when the game has been started
   time_t ended;  // timestamp when the has been ended
   time_t paused; // the amount of seconds the game was paused

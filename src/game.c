@@ -35,8 +35,8 @@ void run() {
 
   // set the eat range to 1
   //뱀 먹이 사정거리 1로 설정
-  game.snake.eat_range = 1;
-
+  game.snake->eat_range = 1;
+  
   // helper variable to keep track of how long we've paused
   //일시정지 시간 저장하는 변수
   time_t pause_start;
@@ -60,7 +60,7 @@ void run() {
   // place the snake in the middle of the game field
   //뱀을 중심에 생성
   grow_snake(&game.snake, game.rows / 2, game.columns / 2);
-  game.snake.dir = DIR_LEFT;
+  game.snake->dir = DIR_LEFT;
 
   // create some fruits on the screen
   //과일 생성
@@ -136,29 +136,29 @@ void run() {
     if(res > interval) {
       // has an effect on the eat_range ?
       //먹이 사정거리에 영향?
-      if(game.snake.eat_range > 1) {
+      if(game.snake->eat_range > 1) {
         // every 200th field, decrease the range
         //200번째마다 사정거리 줄이기
         range_counter = (range_counter + 1) % 150;
         // it turns to 0 after the 200th field
         //200번 후에는 사정거리 0
         if(range_counter == 0) {
-          game.snake.eat_range--; // so, decrease it!  사정거리 줄이기
+          game.snake->eat_range--; // so, decrease it!  사정거리 줄이기
         }
       }
       // new direction?
       //새로운 방향?
-      if((ch == KEY_UP || ch == 'w') && game.snake.dir != DIR_DOWN && game.snake.dir != DIR_UP) {
-        game.snake.dir = DIR_UP;
+      if((ch == KEY_UP || ch == 'w') && game.snake->dir != DIR_DOWN && game.snake->dir != DIR_UP) {
+        game.snake->dir = DIR_UP;
         interval = default_interval * 1.3; //가로 세로 다른 속력
-      } else if((ch == KEY_LEFT || ch == 'a') && game.snake.dir != DIR_RIGHT && game.snake.dir != DIR_LEFT) {
-        game.snake.dir = DIR_LEFT; // 가로 세로 다른 속력
+      } else if((ch == KEY_LEFT || ch == 'a') && game.snake->dir != DIR_RIGHT && game.snake->dir != DIR_LEFT) {
+        game.snake->dir = DIR_LEFT; // 가로 세로 다른 속력
         interval = default_interval * 0.9;
-      } else if((ch == KEY_RIGHT || ch == 'd') && game.snake.dir != DIR_LEFT && game.snake.dir != DIR_RIGHT) {
-        game.snake.dir = DIR_RIGHT; //가로 세로 다른 속력
+      } else if((ch == KEY_RIGHT || ch == 'd') && game.snake->dir != DIR_LEFT && game.snake->dir != DIR_RIGHT) {
+        game.snake->dir = DIR_RIGHT; //가로 세로 다른 속력
         interval = default_interval * 0.9;
-      } else if((ch == KEY_DOWN || ch == 's') && game.snake.dir != DIR_UP && game.snake.dir != DIR_DOWN) {
-        game.snake.dir = DIR_DOWN;
+      } else if((ch == KEY_DOWN || ch == 's') && game.snake->dir != DIR_UP && game.snake->dir != DIR_DOWN) {
+        game.snake->dir = DIR_DOWN;
         interval = default_interval * 1.3; //가로 세로 다른 속력
       }
       // move the snake

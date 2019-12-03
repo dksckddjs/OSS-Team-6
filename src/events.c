@@ -7,7 +7,7 @@
 int check_fruit_collision(GAME* game, int cury, int curx) {
   // calculate the range, limit the range to a maximum of 5
   //사정거리 계산, 5로 최대값 한정
-  int range = (game->snake.eat_range >= 5 ? 5 : game->snake.eat_range) - 1;
+  int range = (game->snake->eat_range >= 5 ? 5 : game->snake->eat_range) - 1;
   // calculate the start position
   //시작점 계산
   int startx = curx - range;
@@ -126,7 +126,10 @@ int check_self_collision(GAME* game, int cury, int curx) {
   //뱀 머리가 뱀 몸과 같은 위치에 있는지 검사
   // exept for the last part (because it will move
   //마지막 부분 빼고
-  return !((on = snake_part_is_on(&game->snake, cury, curx)) == NULL || on == game->snake.parts[game->snake.length - 1]);
+  int i;
+  SNAKEBODY *tail = getLastBody(game->snake);
+
+  return !(on == snake_part_is_on(game->snake, cury, curx) && on != tail->body);
 }
 
 // ends the game if a collision is present
