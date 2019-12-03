@@ -42,7 +42,7 @@ typedef struct snake {
 
 // a struct containing all the data needed for a game
 typedef struct game {
-  FRUITS fruits; // the collection of fruits on the screen
+  FRUITLIST fruits; // the collection of fruits on the screen
   SNAKE snake; // the snake
   time_t started; // timestamp when the game has been started
   time_t ended;  // timestamp when the has been ended
@@ -50,6 +50,7 @@ typedef struct game {
   int highscore; // the number of points
   int rows;
   int columns;
+  int *gameInterval;
 } GAME;
 
 // the maximum length of a name in the highscore

@@ -133,7 +133,7 @@ void get_fruit(FRUITNODE *fruit, int posy, int posx) {
   // how the diffrent fruits are displayed
   //과일 모양
   static char chars[EFFECTS] = {'x', '@', '%', '&', 'r'};
-  static int colors[EFFECTS] = { 4 ,  6 ,  3 ,  5 , 7}; // see color definitions in the end of main.c, 메인에 있는 색깔
+  static int colors[EFFECTS] = { 4 ,  6 ,  3 ,  5 , 5}; // see color definitions in the end of main.c, 메인에 있는 색깔
   // the different effects of the fruits
   //과일 효과
   static void (*effects[EFFECTS])(GAME *) = {
@@ -144,9 +144,9 @@ void get_fruit(FRUITNODE *fruit, int posy, int posx) {
     reduce_speed
   };
   // the chance a certain fruit appears, 특정 과일 생성되는 확률
-  static int chance[EFFECTS] = {100, 25, 5, 2, 5};
+  static int chance[EFFECTS] = {100, 25, 5, 2, 100};
   // the sum of all the chances, 확률 대한 합
-  static int max_chance = 137;
+  static int max_chance = 232;
 
   int i = 0;
   int sum = 0;

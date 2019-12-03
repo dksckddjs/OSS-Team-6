@@ -46,7 +46,7 @@ int check_fruit_collision(GAME* game, int cury, int curx) {
 int check_fruit_collision_handler(GAME* game, int cury, int curx) {
   // the the fruit by the given position
   //특정 칸에 있는 과일
-  FRUIT *fruit = fruit_is_on(&game->fruits, cury, curx);
+  FRUITNODE *fruit = fruit_is_on(&game->fruits, cury, curx);
   // is one on this position?
   //특정 칸에 과일 유무 검사
   if(fruit != NULL) {
