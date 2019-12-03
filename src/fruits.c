@@ -133,7 +133,7 @@ void get_fruit(FRUITNODE *fruit, int posy, int posx) {
   // how the diffrent fruits are displayed
   //과일 모양
   static char chars[EFFECTS] = {'x', '@', '%', '&', 'r'};
-  static int colors[EFFECTS] = { 4 ,  6 ,  3 ,  5 , 5}; // see color definitions in the end of main.c, 메인에 있는 색깔
+  static int colors[EFFECTS] = { 4 ,  6 ,  3 ,  5 , 2}; // see color definitions in the end of main.c, 메인에 있는 색깔
   // the different effects of the fruits
   //과일 효과
   static void (*effects[EFFECTS])(GAME *) = {
