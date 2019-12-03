@@ -37,44 +37,78 @@ int check_invalid_dir(GAME *game, direction dir){
     
 }
 
-long long direction_change(GAME *game, int ch, long long default_interval){
-
+void direction_change(GAME *game, int ch){
+    
   if(  (ch == KEY_UP || ch == 'w') && (check_invalid_dir(game, DIR_UP) == 1)  ) {
     game->snake.dir = DIR_UP;
-      //interval = default_interval * 1.3; //가로 세로 다른 속력
-    return default_interval * (long long)1.9;
+    //interval = default_interval * 1.3; //가로 세로 다른 속력
+    game->interval = game->base_interval * 1.5;
 
-    } else if((ch == KEY_LEFT || ch == 'a') && (check_invalid_dir(game, DIR_LEFT) == 1) ) {
+  }else if((ch == KEY_LEFT || ch == 'a') && (check_invalid_dir(game, DIR_LEFT) == 1) ) {
     game->snake.dir = DIR_LEFT; // 가로 세로 다른 속력
-      //interval = default_interval * 0.9;
-    return default_interval * (long long)0.9; 
+    //interval = default_interval * 0.9;
+    game->interval = game->base_interval * 0.9; 
 
-    } else if((ch == KEY_RIGHT || ch == 'd') && (check_invalid_dir(game, DIR_RIGHT) == 1) ) {
+  }else if((ch == KEY_RIGHT || ch == 'd') && (check_invalid_dir(game, DIR_RIGHT) == 1) ) {
     game->snake.dir = DIR_RIGHT; //가로 세로 다른 속력
-      //interval = default_interval * 0.9;
-    return default_interval * (long long)0.9;
+    //interval = default_interval * 0.9;
+    game->interval = game->base_interval * 0.9;
 
-    } else if((ch == KEY_DOWN || ch == 's') && (check_invalid_dir(game, DIR_DOWN) == 1) ) {
-      game->snake.dir = DIR_DOWN;
-      //interval = default_interval * 1.3; //가로 세로 다른 속력
-      return default_interval * (long long)1.9;
+  }else if((ch == KEY_DOWN || ch == 's') && (check_invalid_dir(game, DIR_DOWN) == 1) ) {
+    game->snake.dir = DIR_DOWN;
+    //interval = default_interval * 1.3; //가로 세로 다른 속력
+    game->interval = game->base_interval * 1.5;
 
-    }
+  }
 
   
-  return default_interval;
+  return;
+}
+
+void enemy_direction_change(GAME *game){
+  time_t t;
+  
+  srand((unsigned) time(&t));
+
+  if( rand() % 4 == 0 && (check_invalid_dir(game, DIR_UP) == 1)){// (ch == KEY_UP || ch == 'w') && (check_invalid_dir(game, DIR_UP) == 1)  ) {
+    game->snake.dir = DIR_UP;
+    //interval = default_interval * 1.3; //가로 세로 다른 속력
+    game->interval = game->base_interval * 1.5;
+
+  }else if( rand() % 4 == 1 && (check_invalid_dir(game, DIR_LEFT) == 1)){//(ch == KEY_LEFT || ch == 'a') && (check_invalid_dir(game, DIR_LEFT) == 1) ) {
+    game->snake.dir = DIR_LEFT; // 가로 세로 다른 속력
+    //interval = default_interval * 0.9;
+    game->interval = game->base_interval * 0.9; 
+
+  }else if( rand() % 4 == 2 && (check_invalid_dir(game, DIR_RIGHT) == 1)){//(ch == KEY_RIGHT || ch == 'd') && (check_invalid_dir(game, DIR_RIGHT) == 1) ) {
+    game->snake.dir = DIR_RIGHT; //가로 세로 다른 속력
+    //interval = default_interval * 0.9;
+    game->interval = game->base_interval * 0.9;
+
+  }else if( rand() % 4 == 3 && (check_invalid_dir(game, DIR_DOWN) == 1)){//(ch == KEY_DOWN || ch == 's') && (check_invalid_dir(game, DIR_DOWN) == 1) ) {
+    game->snake.dir = DIR_DOWN;
+    //interval = default_interval * 1.3; //가로 세로 다른 속력
+    game->interval = game->base_interval * 1.5;
+
+  }
+
+  
+  return;
 }
 
 void run() {
   int ch = 0, ich, i, current_columns, current_rows, success = 1;
 
+  int temp;
   // some variables for the timer (inclusive the interval)
   //타이머 위한 변수
   struct timespec last_time              = {};
   struct timespec current_time           = {};
-  long long default_interval             = 100000000; // 100 ms
-  long long interval                     = default_interval;
-  long long base_interval = 100000000;
+  //long long default_interval                = 100000000;
+  //long long base_interval             = default_interval; // 100 ms
+
+  //long long interval                     = default_interval;
+  
   long long res;
   char playername[HIGHSCORE_NAME_LENGTH] = {};
 
@@ -83,11 +117,18 @@ void run() {
   // create the game struct
   //GAME 생성
   GAME game = {};
-
+  
   // set the eat range to 1
   //뱀 먹이 사정거리 1로 설정
   game.snake.eat_range = 1;
+  game.base_interval = DEFAULT_INTERVAL;
+  game.interval = DEFAULT_INTERVAL;
 
+  GAME enemy = {};
+  enemy.snake.eat_range = 5;
+  enemy.base_interval = DEFAULT_INTERVAL;
+  enemy.interval = DEFAULT_INTERVAL;
+  
   // helper variable to keep track of how long we've paused
   //일시정지 시간 저장하는 변수
   time_t pause_start;
@@ -95,7 +136,8 @@ void run() {
   // get the dimensions of the terminal and store them in the GAME struct
   //윈도우 크기 구해 GAME에 저장
   getmaxyx(stdscr, game.rows, game.columns);
-
+  getmaxyx(stdscr, enemy.rows, enemy.columns);
+  
   // clear the whole screen
   //화면 모두 지우기
   clear();
@@ -113,6 +155,11 @@ void run() {
   grow_snake(&game.snake, game.rows / 2, game.columns / 2);
   game.snake.dir = DIR_LEFT;
 
+  grow_snake(&enemy.snake, enemy.rows / 3, enemy.columns / 3);
+  game.snake.dir = DIR_LEFT;
+
+
+  
   // create some fruits on the screen
   //과일 생성
   // NOM, NOM, NOM
@@ -153,17 +200,17 @@ void run() {
     switch(ich){
     case '0':
       //뱀 속도 기본값으로 지정
-      interval = base_interval;
+      game.base_interval = DEFAULT_INTERVAL;
       break;
 
     case '8':
       //뱀 속도 기본값 올리기
-      default_interval *= 1.1;
+      game.base_interval *= 1.1;
       break;
 
     case '9':
       //뱀 속도 기본값 내리기
-      default_interval *= 0.9;
+      game.base_interval *= 0.9;
       break;
 
     default:
@@ -183,7 +230,7 @@ void run() {
 
     // is the interval over?
     //뱀 이동 주기 끝?
-    if(res > interval) {
+    if(res > game.interval) {
       // has an effect on the eat_range ?
       //먹이 사정거리에 영향?
       if(game.snake.eat_range > 1) {
@@ -215,12 +262,18 @@ void run() {
       }
       */
 
-      interval = direction_change(&game, ch, default_interval);
-
+      direction_change(&game, ch);
       // move the snake
       //뱀 움직이기
       success = move_snake(&game);
 
+      enemy_direction_change(&enemy);
+      temp = move_snake(&enemy);
+      /*
+      if(move_snake(&enemy) == 0)
+	kill_snake(&enemy.snake);
+      */
+      
       // refresh the screen
       //화면 다시 리프레쉬
       refresh();

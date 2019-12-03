@@ -2,7 +2,7 @@
 #define TYPES_H
 
 #include <time.h>
-#include <curses.h>
+#include <ncurses.h>
 #include <stdlib.h>
 
 
@@ -32,6 +32,22 @@ typedef struct fruits {
 } FRUITS;
 
 // the snake
+/*
+typedef struct snake_part {
+  WINDOW* part;
+  snake_part* next;
+}
+  
+typedef struct snake {
+  snake_part* head; //snake head
+  snake_part* tail; //snake tail
+  int length; // length of the dynamic array
+  direction dir; // the direction of the snake
+  int grow; // the number of times the snake has to grow 
+  int eat_range;
+} SNAKE;
+*/
+
 typedef struct snake {
   WINDOW** parts; // dynamic array of window pointers
   int length; // length of the dynamic array
@@ -48,12 +64,17 @@ typedef struct game {
   time_t ended;  // timestamp when the has been ended
   time_t paused; // the amount of seconds the game was paused
   int highscore; // the number of points
+  
+  long long base_interval;  //base interval used for both x/y movement
+  long long interval;  //actual interval based on x/y
+  
   int rows;
   int columns;
 } GAME;
 
 // the maximum length of a name in the highscore
 #define HIGHSCORE_NAME_LENGTH 15
+#define DEFAULT_INTERVAL 100000000
 
 typedef struct highscore {
   char name[HIGHSCORE_NAME_LENGTH]; // the name of the player who made this score
