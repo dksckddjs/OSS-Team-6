@@ -28,6 +28,7 @@
 WINDOW *create_dialog_window(const char *title) {
   WINDOW *win;
   int sx, sy, i, u, startpos;
+  char enter_to_menu[] = "Press enter to go to the menu...";
 
   // get the screen size
   // 현재 화면 크기 얻기
@@ -64,11 +65,16 @@ WINDOW *create_dialog_window(const char *title) {
      }
    }
   */
-    for(u = LINE1; u <= LINE2; u++) {
+  for(u = LINE1; u <= LINE2; u++) {
     for(i = INDEX0; i < DIALOG_WIDTH; i++) {
       mvwprintw(win, u, i, "%c", i == INDEX0 || i == INDEX_LAST ? '+' : '-');
     }
   }
+
+  if(strcmp(title, "MENU") != 0) {
+      mvwprintw(win, DIALOG_HEIGHT - 2, 1, enter_to_menu);
+  }
+    
 
   /*
   18011561_cleanCode
@@ -104,7 +110,7 @@ WINDOW *create_dialog_window(const char *title) {
 }
 
 // wait until enter is pressed
-// 엔터 눌릴때까지 디라기ㅣ
+// 엔터 눌릴때까지 기다리기
 void wait_return(WINDOW *win) {
   int ch; // the char currently pressed 현제 입력값
 
@@ -242,12 +248,22 @@ int display_menu() {
   "%i) Controls",
   "%i) Help",
   "%i) Clear Highscores",
-  "%i) Exit"
+  "%i) Exit",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "Pressing enter also starts the game..."
   };
   
   // create a numbered dialog
   //숫자 리스트 다이얼로그 윈도우 생성
-  return create_numbered_dialog("MENU", (char *)menu, 6);
+  return create_numbered_dialog("MENU", (char *)menu, 16);
 }
 
 // displays the controls dialog
@@ -266,13 +282,12 @@ void display_controls() {
   "9 - faster",
   "0 - reset speed",
   "p - pause the game"
-  "",
-  "press enter to go back to the menu .."
+  ""
   };
 
   // create the dialog
   // 이다얼로그 생성
-  create_enter_dialog("CONTROLS", (const char *)controls, 11);
+  create_enter_dialog("CONTROLS", (const char *)controls, 10);
 }
 
 // displays the help menu
@@ -294,13 +309,12 @@ void display_help() {
   " &        eat boost, increases",
   "          range of eating for a",
   "          short time",
-  "",
-  "press enter to go back to the menu .."
+  ""
   };
 
   // create the dialog
   // 윈도우 생성
-  create_enter_dialog("HELP", (const char *)help, 15);
+  create_enter_dialog("HELP", (const char *)help, 14);
 }
 
 // display a mesage to the user that the highscore has been cleared
@@ -352,7 +366,7 @@ void show_highscores() {
   }
 */
   // limit the highscore display to (at the moment 14) entries
-  // 하이스코어를 14개만 표시
+  // 하이스코어를 10개만 표시
   num = HIGHSCORE_LIMIT;
 
   // create a char array for the content of the highscore table
