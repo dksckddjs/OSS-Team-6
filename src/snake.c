@@ -1,6 +1,15 @@
 #include "snake.h"
 #include "events.h"
 
+SNAKEBODY *getLastBody(SNAKE *snake) {
+	SNAKEBODY *tmp = snake->head;
+	while (tmp->next != NULL) {
+		tmp = tmp->next;
+	}
+	return tmp;
+}
+
+
 // check if a part of the snake is on the given spot
 //뱀의 일부가 특정 위치에 있는지 확인
 // returns a WINDOW * if one is found, NULL if not
@@ -72,7 +81,7 @@ void grow_snake(SNAKE *snake, int posy, int posx) {
 	else {//snake->parts[snake->length - 1] = win = newwin(1, 1, posy, posx);//배열의 마지막 위치에 뱀의 새부분을 저장
 		getLastBody(snake)->next = newBody;
 	}
-	newBody = win = newwin(1, 1, posy, posx);
+	newBody->body = win = newwin(1, 1, posy, posx);
 
 	// print the character on the window
 	//뱀 부분 화면에 출력
@@ -259,10 +268,3 @@ void redraw_snake(SNAKE *snake) {
 	}
 }
 
-SNAKEBODY *getLastBody(SNAKE *snake) {
-	SNAKEBODY *tmp = snake->head;
-	while (tmp->next != NULL) {
-		tmp = tmp->next;
-	}
-	return tmp;
-}
