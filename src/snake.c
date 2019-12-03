@@ -11,10 +11,11 @@ WINDOW *snake_part_is_on(SNAKE *snake, int posy, int posx) {
 
   // iterate each part
   //각 부분 들어가기
+ /*
   for(i = 0; i < snake->length; i++) {
     // get the position of the current part
     //현재 부위의 좌표값 구하기
-    getbegyx(snake->parts[i], cury, curx);
+    getbegyx(snake->parts[i], cury, curx);//cury와 curx가 반환된 현재 뱀의 위치
 
     // compare the position
     //좌표값 비교
@@ -23,6 +24,13 @@ WINDOW *snake_part_is_on(SNAKE *snake, int posy, int posx) {
       //현재 부분 리턴
       return snake->parts[i];
     }
+  }
+  */
+  while (snake->parts->next != NULL) {
+	  if (snake->parts->posx == curx && snake->parts->posy == cury) {
+		  return snake->parts;
+	  }
+	  snake = snake->parts->next;
   }
 
   return NULL;
@@ -40,6 +48,7 @@ void grow_snake(SNAKE *snake, int posy, int posx) {
   snake->length++;
   // allocate memory for the new part
   //새로운 부분 메모리 할당
+  /*
   if(snake->length == 0) {
     // initialize the array with malloc if it is the first part
     //처음 칸이면 malloc
@@ -49,10 +58,25 @@ void grow_snake(SNAKE *snake, int posy, int posx) {
     //처음 칸이 아니면 realloc
     snake->parts = realloc(snake->parts, sizeof(WINDOW*) * snake->length);
   }
+  */
+
+  SNAKEBODY* newBody;//새 삽입 부분
+  newBody = (SNAKEBODY*)malloc(sizeof(SNAKEBODY));
+  newBody->next = NULL;
   
   // create a new window
   //새로운 윈도우 생성
-  snake->parts[snake->length - 1] = win = newwin(1, 1, posy, posx);
+  if (snake->length == 0) {//머리 처리(처음 케이스)
+	  snake->parts = newBody;
+  }
+  else {//snake->parts[snake->length - 1] = win = newwin(1, 1, posy, posx);//배열의 마지막 위치에 뱀의 새부분을 저장
+	  while (snake->parts->next != NULL) {
+		  snake = snake->parts->next;
+	  }
+	  snake->parts->next = newBody;
+  }
+  snake->parts = win = newwin(1, 1, posy, posx);
+
   // print the character on the window
   //뱀 부분 화면에 출력
   wattron(win, COLOR_PAIR(2));
@@ -70,12 +94,17 @@ void kill_snake(SNAKE *snake) {
   int i;
   // delete each created window of the snake
   //뱀 각 부분별로 윈도우 없애기
+  /*
   for(i = 0; i < snake->length; i++) {
     delwin(snake->parts[i]);
   }
+  */
+  while (snake!=NULL) {
+	  delwin(snake->parts);
+	  snake->parts = snake->parts->next;
+  }
   // free the resources allocated for the window pointers
   //윈도우 포인터 대한 메모리 프리
-  free(snake->parts);
 
   return;
 }
@@ -117,7 +146,7 @@ int move_snake(GAME *game) {
 
   // the position of the snake head
   //뱀 머리 위치
-  getbegyx(game->snake.parts[0], cury, curx);
+  getbegyx(game->snake.parts, cury, curx);
 
   // make a copy
   //복사하기
@@ -152,10 +181,10 @@ int move_snake(GAME *game) {
   if(success) {
     // set he direction of the head
     //뱀 머리의 방향 설정
-    mvwprintw(game->snake.parts[0], 0, 0, "%c", game->snake.dir);
+    mvwprintw(game->snake.parts, 0, 0, "%c", game->snake.dir);
     // move the window
     //윈도우 움직이기
-    mvwin(game->snake.parts[0], cury, curx);
+    mvwin(game->snake.parts, cury, curx);
 
     // copy values back
     //다시 복사하기
@@ -164,7 +193,9 @@ int move_snake(GAME *game) {
 
     // iterate through each part of the snake
     //뱀이 각 부위별로 들어가기
-    for(i = 1; i < game->snake.length; i++) {
+   
+	/*
+	for(i = 1; i < game->snake.length; i++) {
       // get the position of the current part
       //부위의 위치 구하기
       getbegyx(game->snake.parts[i], tmpy, tmpx);
@@ -178,6 +209,23 @@ int move_snake(GAME *game) {
       cury = tmpy;
       curx = tmpx;
     }
+	*/
+
+	game->snake.parts = game->snake.parts->next;
+	for (i = 1; i < game->snake.length; i++) {
+		getbegyx(game->snake.parts,tmpy, tmpx);		
+
+		// move the part to the position of the previous one
+	  //전의 위치로 움직이기
+		mvwin(game->snake.parts, cury, curx);
+
+		// make a copy
+		//복사
+		cury = tmpy;
+		curx = tmpx;
+		
+		game->snake.parts = game->snake.parts->next;
+	}
 
     // grow?
     //길이 증가 필요?
@@ -192,7 +240,7 @@ int move_snake(GAME *game) {
     } else {
       // is the snake head on the same position as the last part of the snake was before?
       //혀내 뱀 머리의 위치가 전에 뱀 몸이 있엇던 부위인가?
-      getbegyx(game->snake.parts[0], tmpy, tmpx);
+      getbegyx(game->snake.parts, tmpy, tmpx);
       if(!(tmpy == cury && tmpx == curx)) {
         // if no print a space at this position
         //아니면 스페이스 출력
@@ -219,7 +267,8 @@ void redraw_snake(SNAKE *snake) {
   for(i = 0; i < snake->length; i++) {
     // redraw the current part
     //부위 다시 그리기
-    redrawwin(snake->parts[i]);
-    wrefresh(snake->parts[i]);
+    redrawwin(snake->parts);
+    wrefresh(snake->parts);
+	snake->parts = snake->parts->next;
   }
 }

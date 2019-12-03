@@ -32,12 +32,29 @@ typedef struct fruits {
 } FRUITS;
 
 // the snake
+
+/*
 typedef struct snake {
   WINDOW** parts; // dynamic array of window pointers
   int length; // length of the dynamic array
   direction dir; // the direction of the snake
   int grow; // the number of times the snake has to grow 
   int eat_range;
+} SNAKE;
+*/
+
+typedef struct SNAKEBODY {
+	struct SNAKEBODY* next;//뱀의 다음 노드
+	int posy;
+	int posx;
+}SNAKEBODY;
+
+typedef struct snake {
+	struct SNAKEBODY* parts; // dynamic array of window pointers
+	int length; // length of the dynamic array
+	direction dir; // the direction of the snake
+	int grow; // the number of times the snake has to grow 
+	int eat_range;//뱀의 식사 범위
 } SNAKE;
 
 // a struct containing all the data needed for a game
