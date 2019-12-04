@@ -48,5 +48,5 @@ void eat_boost(GAME *game) {
 
 void reduce_speed(GAME *game) {
   normal_effect(game);
-  game->base_interval *= 0.9;
+  //game->base_interval *= 0.9;
 } 

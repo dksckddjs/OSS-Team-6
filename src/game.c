@@ -65,32 +65,28 @@ void direction_change(GAME *game, int ch){
   return;
 }
 
-void enemy_direction_change(GAME *game){
+void enemy_direction_change(GAME *game, int r){
   time_t t;
   int random;
   
-  srand((unsigned) time(&t));
-  random = rand() % 4;
+  //srand ( time(NULL) );
+  //random = rand() % 4;
   
-  if( random == 0 ){//&& (check_invalid_dir(game, DIR_DOWN) == 1) ){
+  if( r == 0 ){//&& (check_invalid_dir(game, DIR_DOWN) == 1) ){
     game->snake.dir = DIR_UP;
-    //interval = default_interval * 1.3; //가로 세로 다른 속력
-    //game->interval = game->base_interval * 1.5;
+    
 
-  }else if( random == 1 ){//  && (check_invalid_dir(game, DIR_RIGHT) == 1) ){
+  }else if( r == 1 ){//  && (check_invalid_dir(game, DIR_RIGHT) == 1) ){
     game->snake.dir = DIR_LEFT; // 가로 세로 다른 속력
-    //interval = default_interval * 0.9;
-    //game->interval = game->base_interval * 0.9; 
+     
 
-  }else if( random == 2  ){//&& (check_invalid_dir(game, DIR_LEFT) == 1) ){
+  }else if( r == 2  ){//&& (check_invalid_dir(game, DIR_LEFT) == 1) ){
     game->snake.dir = DIR_RIGHT; //가로 세로 다른 속력
-    //interval = default_interval * 0.9;
-    //game->interval = game->base_interval * 0.9;
+    
 
-  }else if( random == 3  ){//&& (check_invalid_dir(game, DIR_UP) == 1) ){
+  }else if( r == 3  ){//&& (check_invalid_dir(game, DIR_UP) == 1) ){
     game->snake.dir = DIR_DOWN;
-    //interval = default_interval * 1.3; //가로 세로 다른 속력
-    //game->interval = game->base_interval * 1.5;
+    
 
   }
 
@@ -129,19 +125,15 @@ void run() {
   //윈도우 크기 구해 GAME에 저장
   getmaxyx(stdscr, game.rows, game.columns);
 
-  /*
-  GAME enemies[2]; 
-  for(i=0; i<2; i++){
+  
+  GAME enemies[30] = {}; 
+  for(i=0; i<30; i++){
+    
     enemies[i].snake.eat_range = 1;
     enemies[i].base_interval = DEFAULT_INTERVAL;
     enemies[i].interval = DEFAULT_INTERVAL;
     getmaxyx(stdscr, enemies[i].rows, enemies[i].columns);
   }
-  */
-  GAME enemy1, enemy2, enemy3;
-  getmaxyx(stdscr, enemy1.rows, enemy1.columns);
-  getmaxyx(stdscr, enemy2.rows, enemy2.columns);
-  getmaxyx(stdscr, enemy3.rows, enemy3.columns);
   
   // helper variable to keep track of how long we've paused
   //일시정지 시간 저장하는 변수
@@ -169,21 +161,16 @@ void run() {
   game.snake.dir = DIR_LEFT;
 
 
-  /*
-  //srand((unsigned) time(&t));
-  for(i=0; i<2; i++){
-    grow_snake(&enemies[i].snake, game.rows / i+2, game.columns / i+2);
-    enemies[i].snake.dir = DIR_LEFT;
-    //enemy_direction_change(&enemies[i]); 
+  // rand((unsigned) time(&t));
+  srand(time(NULL));
+  for(i=0; i<30; i++){
+    grow_snake(&(enemies[i].snake), rand() % (game.rows -1), rand() % (game.columns -1) );
+    // enemies[i].snake.dir = DIR_LEFT;
+    //enemy_direction_change(&enemies[i]);
+    
   }
-  */
-  grow_snake(&enemy1.snake, game.rows / 5, game.columns / 2);
-  enemy1.snake.dir = DIR_LEFT;
-  grow_snake(&enemy2.snake, game.rows / 3, game.columns / 2);
-  enemy2.snake.dir = DIR_LEFT;
-  grow_snake(&enemy3.snake, game.rows / 5, game.columns / 4);
-  enemy3.snake.dir = DIR_LEFT;
-
+  
+  
   
   // create some fruits on the screen
   //과일 생성
@@ -274,7 +261,7 @@ void run() {
       //새로운 방향?
       if((ch == KEY_UP || ch == 'w') && game.snake.dir != DIR_DOWN && game.snake.dir != DIR_UP) {
         game.snake.dir = DIR_UP;
-        interval = default_interval * 1.3; //가로 세로 다른 속력
+        inte\rval = default_interval * 1.3; //가로 세로 다른 속력
       } else if((ch == KEY_LEFT || ch == 'a') && game.snake.dir != DIR_RIGHT && game.snake.dir != DIR_LEFT) {
         game.snake.dir = DIR_LEFT; // 가로 세로 다른 속력
         interval = default_interval * 0.9;
@@ -287,23 +274,18 @@ void run() {
       }
       */
 
-      /*
-      for(i=0; i<20; i++){
-	enemy_direction_change(&enemies[i]);
-	temp = move_snake(&enemies[i]);
-	
-	  if(move_snake(&enemy) == 0)
-	  kill_snake(&enemy.snake);
+      //int r;
+      srand(time(NULL));
+      
+      for(i=0; i<30; i++){
+	enemy_direction_change(&(enemies[i]), (rand()%4) );
+	temp = move_snake(&(enemies[i]));
 	
       }
-      */
 
-      enemy_direction_change(&enemy1);
-      temp = move_snake(&enemy1);
-      enemy_direction_change(&enemy2);
-      temp = move_snake(&enemy2);
-      enemy_direction_change(&enemy3);
-      temp = move_snake(&enemy3);
+
+
+
       
       direction_change(&game, ch);
       // move the snake
