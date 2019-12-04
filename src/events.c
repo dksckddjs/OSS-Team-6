@@ -116,6 +116,8 @@ int check_border_collision_handler(GAME* game, int cury, int curx) {
   return 0; // code for end of the game, 게임 종료 코드
 }
 
+
+
 // check if the snake is colliding on it's self
 //뱀이 자기 자신과 충돌 검사
 // we only need to check if the snake head is colliding
@@ -134,3 +136,4 @@ int check_self_collision(GAME* game, int cury, int curx) {
 int check_self_collision_handler(GAME* game, int cury, int curx) {
   return 0; // code for end of the game, 게임 종료 코드
 }
+

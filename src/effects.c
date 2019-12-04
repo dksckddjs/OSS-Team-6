@@ -45,3 +45,8 @@ void eat_boost(GAME *game) {
   normal_effect(game);
   game->snake.eat_range++;
 }
+
+void reduce_speed(GAME *game) {
+  normal_effect(game);
+  game->base_interval *= 0.9;
+} 

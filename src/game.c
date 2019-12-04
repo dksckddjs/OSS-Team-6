@@ -67,28 +67,30 @@ void direction_change(GAME *game, int ch){
 
 void enemy_direction_change(GAME *game){
   time_t t;
+  int random;
   
   srand((unsigned) time(&t));
-
-  if( rand() % 4 == 0 && (check_invalid_dir(game, DIR_UP) == 1)){// (ch == KEY_UP || ch == 'w') && (check_invalid_dir(game, DIR_UP) == 1)  ) {
+  random = rand() % 4;
+  
+  if( random == 0 ){//&& (check_invalid_dir(game, DIR_DOWN) == 1) ){
     game->snake.dir = DIR_UP;
     //interval = default_interval * 1.3; //가로 세로 다른 속력
-    game->interval = game->base_interval * 1.5;
+    //game->interval = game->base_interval * 1.5;
 
-  }else if( rand() % 4 == 1 && (check_invalid_dir(game, DIR_LEFT) == 1)){//(ch == KEY_LEFT || ch == 'a') && (check_invalid_dir(game, DIR_LEFT) == 1) ) {
+  }else if( random == 1 ){//  && (check_invalid_dir(game, DIR_RIGHT) == 1) ){
     game->snake.dir = DIR_LEFT; // 가로 세로 다른 속력
     //interval = default_interval * 0.9;
-    game->interval = game->base_interval * 0.9; 
+    //game->interval = game->base_interval * 0.9; 
 
-  }else if( rand() % 4 == 2 && (check_invalid_dir(game, DIR_RIGHT) == 1)){//(ch == KEY_RIGHT || ch == 'd') && (check_invalid_dir(game, DIR_RIGHT) == 1) ) {
+  }else if( random == 2  ){//&& (check_invalid_dir(game, DIR_LEFT) == 1) ){
     game->snake.dir = DIR_RIGHT; //가로 세로 다른 속력
     //interval = default_interval * 0.9;
-    game->interval = game->base_interval * 0.9;
+    //game->interval = game->base_interval * 0.9;
 
-  }else if( rand() % 4 == 3 && (check_invalid_dir(game, DIR_DOWN) == 1)){//(ch == KEY_DOWN || ch == 's') && (check_invalid_dir(game, DIR_DOWN) == 1) ) {
+  }else if( random == 3  ){//&& (check_invalid_dir(game, DIR_UP) == 1) ){
     game->snake.dir = DIR_DOWN;
     //interval = default_interval * 1.3; //가로 세로 다른 속력
-    game->interval = game->base_interval * 1.5;
+    //game->interval = game->base_interval * 1.5;
 
   }
 
@@ -123,20 +125,31 @@ void run() {
   game.snake.eat_range = 1;
   game.base_interval = DEFAULT_INTERVAL;
   game.interval = DEFAULT_INTERVAL;
+  // get the dimensions of the terminal and store them in the GAME struct
+  //윈도우 크기 구해 GAME에 저장
+  getmaxyx(stdscr, game.rows, game.columns);
 
-  GAME enemy = {};
-  enemy.snake.eat_range = 5;
-  enemy.base_interval = DEFAULT_INTERVAL;
-  enemy.interval = DEFAULT_INTERVAL;
+  /*
+  GAME enemies[2]; 
+  for(i=0; i<2; i++){
+    enemies[i].snake.eat_range = 1;
+    enemies[i].base_interval = DEFAULT_INTERVAL;
+    enemies[i].interval = DEFAULT_INTERVAL;
+    getmaxyx(stdscr, enemies[i].rows, enemies[i].columns);
+  }
+  */
+  GAME enemy1, enemy2, enemy3;
+  getmaxyx(stdscr, enemy1.rows, enemy1.columns);
+  getmaxyx(stdscr, enemy2.rows, enemy2.columns);
+  getmaxyx(stdscr, enemy3.rows, enemy3.columns);
   
   // helper variable to keep track of how long we've paused
   //일시정지 시간 저장하는 변수
   time_t pause_start;
 
-  // get the dimensions of the terminal and store them in the GAME struct
-  //윈도우 크기 구해 GAME에 저장
-  getmaxyx(stdscr, game.rows, game.columns);
-  getmaxyx(stdscr, enemy.rows, enemy.columns);
+  
+
+  //getmaxyx(stdscr, enemy.rows, enemy.columns);
   
   // clear the whole screen
   //화면 모두 지우기
@@ -155,9 +168,21 @@ void run() {
   grow_snake(&game.snake, game.rows / 2, game.columns / 2);
   game.snake.dir = DIR_LEFT;
 
-  grow_snake(&enemy.snake, enemy.rows / 3, enemy.columns / 3);
-  game.snake.dir = DIR_LEFT;
 
+  /*
+  //srand((unsigned) time(&t));
+  for(i=0; i<2; i++){
+    grow_snake(&enemies[i].snake, game.rows / i+2, game.columns / i+2);
+    enemies[i].snake.dir = DIR_LEFT;
+    //enemy_direction_change(&enemies[i]); 
+  }
+  */
+  grow_snake(&enemy1.snake, game.rows / 5, game.columns / 2);
+  enemy1.snake.dir = DIR_LEFT;
+  grow_snake(&enemy2.snake, game.rows / 3, game.columns / 2);
+  enemy2.snake.dir = DIR_LEFT;
+  grow_snake(&enemy3.snake, game.rows / 5, game.columns / 4);
+  enemy3.snake.dir = DIR_LEFT;
 
   
   // create some fruits on the screen
@@ -262,17 +287,28 @@ void run() {
       }
       */
 
+      /*
+      for(i=0; i<20; i++){
+	enemy_direction_change(&enemies[i]);
+	temp = move_snake(&enemies[i]);
+	
+	  if(move_snake(&enemy) == 0)
+	  kill_snake(&enemy.snake);
+	
+      }
+      */
+
+      enemy_direction_change(&enemy1);
+      temp = move_snake(&enemy1);
+      enemy_direction_change(&enemy2);
+      temp = move_snake(&enemy2);
+      enemy_direction_change(&enemy3);
+      temp = move_snake(&enemy3);
+      
       direction_change(&game, ch);
       // move the snake
       //뱀 움직이기
       success = move_snake(&game);
-
-      enemy_direction_change(&enemy);
-      temp = move_snake(&enemy);
-      /*
-      if(move_snake(&enemy) == 0)
-	kill_snake(&enemy.snake);
-      */
       
       // refresh the screen
       //화면 다시 리프레쉬
@@ -339,6 +375,7 @@ void run() {
   // free all the resources reserved in the game struct
   //GAME 메모리 해제
   kill_game(&game);
+  
 }
 
 void draw_border(GAME *game) {

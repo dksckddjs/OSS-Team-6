@@ -10,10 +10,12 @@ int check_fruit_collision_handler(GAME* game, int cury, int curx);
 
 int check_border_collision(GAME* game, int cury, int curx);
 int check_border_collision_handler(GAME* game, int cury, int curx);
+int check_enemy_border_collision_handler(GAME* game, int cury, int curx);
 
 int check_extended_border_collision(GAME* game, int cury, int curx);
 
 int check_self_collision(GAME* game, int cury, int curx);
 int check_self_collision_handler(GAME* game, int cury, int curx);
+int check_enemy_self_collision_handler(GAME* game, int cury, int curx);
 
 #endif /* EVENTS_H */

@@ -88,19 +88,40 @@ FRUIT *fruit_is_on(FRUITS *fruits, int posy, int posx) {
   return NULL;
 }
 
+int isNullSpace(GAME *game,int randy,int randx) {
+  if(snake_part_is_on(&game->snake,randy,randx) != NULL || fruit_is_on(&game->fruits, randy, randx) != NULL || check_extended_border_collision(game, randy, randx)) {
+    return 0;
+  }
+  return 1;
+}
+
 // create a new fruit in the game
 //새로운 과일 생성
 void grow_fruit(GAME* game) {
   int randy,randx;
   // generate a new random position until a empty spot is found
   //빈 위치 찾을때까지 랜덤으로 위치 생성
+
+  /*
   do {
     randy = rand() % game->rows;
     randx = rand() % game->columns;
     // is nothing else there in the generated position?
     //빈 위치이지 검사
   } while (snake_part_is_on(&game->snake, randy, randx) != NULL || fruit_is_on(&game->fruits, randy, randx) != NULL || check_extended_border_collision(game, randy, randx));
+  */
 
+  
+  randy = rand() % game->rows;
+  randx = rand() % game->columns;
+  // generate a new random position until a empty spot is found
+  //빈 위치 찾을때까지 랜덤으로 위치 생성
+  if(!isNullSpace(game, randy, randx)) {
+    grow_fruit(game);
+    return;
+  }// 가독성은 아래꺼 속도는 위에꺼
+
+  
   // increase the length
   //길이 늘리기
   game->fruits.length++;
@@ -127,20 +148,26 @@ void grow_fruit(GAME* game) {
 void get_fruit(FRUIT *fruit, int posy, int posx) {
   // how the diffrent fruits are displayed
   //과일 모양
-  static char chars[EFFECTS] = {'x', '@', '%', '&'};
-  static int colors[EFFECTS] = { 4 ,  6 ,  3 ,  5 }; // see color definitions in the end of main.c, 메인에 있는 색갈
+  //static char chars[EFFECTS] = {'x', '@', '%', '&'};
+  //static int colors[EFFECTS] = { 4 ,  6 ,  3 ,  5 }; // see color definitions in the end of main.c, 메인에 있는 색갈
+
+  static char chars[EFFECTS] = {'x', '@', '%', '&', 'r'};
+  static int colors[EFFECTS] = { 4 ,  6 ,  3 ,  5 , 2}; // see color definitions in the end of main.c, 메인에 있는 색깔
+
   // the different effects of the fruits
   //과일 효과
   static void (*effects[EFFECTS])(GAME *) = {
     normal_effect, // see effects.c, effects.c 보기
     double_grow,
     mega_food,
-    eat_boost
+    eat_boost,
+    reduce_speed
   };
+  
   // the chance a certain fruit appears, 특정 과일 생성되는 확률
-  static int chance[EFFECTS] = {100, 25, 5, 2};
+  static int chance[EFFECTS] = {100, 25, 5, 2, 100};
   // the sum of all the chances, 확률 대한 합
-  static int max_chance = 132;
+  static int max_chance = 232;
 
   int i = 0;
   int sum = 0;
@@ -150,11 +177,13 @@ void get_fruit(FRUIT *fruit, int posy, int posx) {
   int random = rand() % max_chance;
   // get the number of the fruit out of the random number
   //과일 숫자를 난수로부터 생성
+  
   // the index will increase every time the random value is greater
   // than the sum of all elements before the index and the element with the index
   // there is also a bounds check for the array
   //난수가 인덱스 전의 값들보다 크면 인덱스도 커짐
   //배열 대한 오버플로우도 확인
+  
   while(random >= (sum += chance[i]) && i + 1 < EFFECTS) {
     i++; // next index, 다음 인덱스
   };
