@@ -232,7 +232,7 @@ int create_numbered_dialog(const char *title, const char *contents, int lines) {
   // return the number pressed
   // 선택된 숫자 리턴
   // return number;
-  
+  return -1;
 }
 
 // displays the main menu

@@ -66,8 +66,6 @@ void direction_change(GAME *game, int ch){
 }
 
 void enemy_direction_change(GAME *game, int r){
-  time_t t;
-  int random;
   
   //srand ( time(NULL) );
   //random = rand() % 4;
